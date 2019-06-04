@@ -106,6 +106,10 @@ while not done:
             minimaxe = minimaxer(copy.deepcopy(spielbrett_save1), -1)
             ai_value, ai_reihe, ai_stelle = minimaxe.wert, minimaxe.zeile, minimaxe.spalte
 
+            print("Ai Value: {}".format(ai_value))
+
+            print("Wins: {}, Losses: {}, Draws: {}".format(minimaxe.nr_win, minimaxe.nr_lose, minimaxe.nr_draw))
+
             print("AI moves to: {}/{}".format(ai_reihe, ai_stelle))
             spielbrett[ai_reihe][ai_stelle] = -1
             print("AI done")
