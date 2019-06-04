@@ -164,6 +164,7 @@ def getclickindex(clickpos):
                 return i, j
     return False
 
+
 pygame.init()
 screen = pygame.display.set_mode((500, 500))
 
@@ -205,7 +206,7 @@ while not done:
                 done = True
 
             # KI
-            ai_value, ai_reihe, ai_stelle = minimax(spielbrett_save1, -1)
+            ai_value, ai_reihe, ai_stelle = minimax(spielbrett_save1.copy(), -1)
 
             print("AI moves to: {}/{}".format(ai_reihe, ai_stelle))
             spielbrett[ai_reihe][ai_stelle] = -1
