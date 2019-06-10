@@ -34,18 +34,19 @@ class minimaxer:
 
     def minimax(self, brett, player, recursion):
         # Check if you can even keep playing
-        if checktictactoe(brett.copy(), -1):
+        if self.checktictactoe(brett.copy(), -1):
             print("WINNER {}".format(recursion))
             self.nr_win += 1
-            return 1, None, None  # MAX
-        if checktictactoe(brett.copy(), 1):
+            return 5, None, None  # MAX
+        if self.checktictactoe(brett.copy(), 1):
             print("LOSER {}".format(recursion))
             self.nr_lose += 1
-            return -1, None, None  # MIN
-        if checkvollesbrett(brett.copy()):
+            return -5, None, None  # MIN
+        if self.checkvollesbrett(brett.copy()):
             print("DRAW {}".format(recursion))
             self.nr_draw += 1
             return 1, None, None  # MIN
+
 
         # If you can make a move, try all of them!
         minimaxreturnvalues = []
@@ -94,4 +95,15 @@ class minimaxer:
                     return False
         return True
 
-
+    def checkzweier(self, brett, spieler):
+        for i in range(3):
+            if (brett[i][1] == brett[i][0] or brett[i][1] == brett[i][2]) and brett[i][1] == spieler:
+                return True
+        for i in range(3):
+            if (brett[0][i] == brett[1][i] or brett[2][i] == brett[1][i]) and brett[1][i] == spieler:
+                return True
+        if brett[1][1] == spieler and (brett[1][1] == brett[0][0] or brett[1][1] == brett[2][2]):
+            return True
+        if brett[1][1] == spieler and (brett[1][1] == brett[0][2] or brett[1][1] == brett[2][0]):
+            return True
+        return False
