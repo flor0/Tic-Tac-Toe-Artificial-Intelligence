@@ -13,7 +13,7 @@ def checktictactoe(spielbrett1, player):
     if spielbrett_temp[0][2] == player and spielbrett_temp[1][1] == player and spielbrett_temp[2][0] == player:
         return True
     return False
-# TODO: BROKEN!
+
 def checkvollesbrett(brett):
     for i in range(3):
         for j in range(3):
@@ -27,6 +27,7 @@ class minimaxer:
     def __init__(self, spielfeld2, spieler2):
         self.spielfeld = spielfeld2
         self.spieler = spieler2
+        self.opponent = 1 if self.spieler == 2 else 2
         self.nr_lose = 0
         self.nr_win = 0
         self.nr_draw = 0
