@@ -36,45 +36,44 @@ class minimaxer:
     def minimax(self, brett, player, recursion):
         # Check if you can even keep playing
         if self.checktictactoe(brett.copy(), -1):
-            print("WINNER {}".format(recursion))
             self.nr_win += 1
             return 5, None, None  # MAX
         if self.checktictactoe(brett.copy(), 1):
-            print("LOSER {}".format(recursion))
             self.nr_lose += 1
             return -5, None, None  # MIN
         if self.checkvollesbrett(brett.copy()):
-            print("DRAW {}".format(recursion))
             self.nr_draw += 1
             return 1, None, None  # MIN
 
 
-        # If you can make a move, try all of them!
-        minimaxreturnvalues = []
-        zuge = []
-        n = 0
-        for zeile in range(len(brett)):
-            for spalte in range(len(brett[zeile])):
-                if brett[zeile][spalte] == 0:
-                    brett_weiter = copy.deepcopy(brett)
-                    brett_weiter[zeile][spalte] = player
-                    minimaxreturnvalues.append(self.minimax(brett_weiter, -player, recursion+1))
-                    print(brett_weiter)
-                    n += 1
-                    zuge.append((zeile, spalte))
-        print(len(minimaxreturnvalues))
-        meinwert = sum([i[0] for i in minimaxreturnvalues])
-        max_wert = max([i[0] for i in minimaxreturnvalues])
-        meine_zeile = None
-        meine_spalte = None
-        for i in range(len(minimaxreturnvalues)):
-            if minimaxreturnvalues[i][0] == max_wert:
-                meine_zeile = zuge[i][0]
-                meine_spalte = zuge[i][1]
-                break
+        if player == -1:
+            maxEval = -10000000000000000000
+            maxZug = ()
+            for zeile in range(len(brett)):
+                for spalte in range(len(brett[zeile])):
+                    if brett[zeile][spalte] == 0:
+                        brett_weiter = copy.deepcopy(brett)
+                        brett_weiter[zeile][spalte] = player
+                        temp = self.minimax(brett_weiter, -player, recursion+1)
+                        if temp[0] > maxEval:
+                            maxEval = temp[0]
+                            maxZug = (zeile, spalte)
 
+            return maxEval, maxZug[0], maxZug[1]
+        else:
+            minEval = 100000000000000000
+            minZug = ()
+            for zeile in range(len(brett)):
+                for spalte in range(len(brett[zeile])):
+                    if brett[zeile][spalte] == 0:
+                        brett_weiter = copy.deepcopy(brett)
+                        brett_weiter[zeile][spalte] = player
+                        temp = self.minimax(brett_weiter, -player, recursion + 1)
+                        if temp[0] < minEval:
+                            minEval = temp[0]
+                            minZug = (zeile, spalte)
 
-        return meinwert, meine_zeile, meine_spalte
+            return minEval, minZug[0], minZug[1]
 
     def checktictactoe(self, spielbrett1, player):
         spielbrett1 = spielbrett1.copy()
