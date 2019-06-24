@@ -3,7 +3,10 @@ import sys, random
 import pygame
 from anytree import Node, RenderTree
 from minmax import *
+import minmax_alpha_beta
 import copy
+import time
+
 sys.setrecursionlimit(255168)
 node = Node("origin")
 nodes = [node]
@@ -29,7 +32,7 @@ def drawboard():
     pygame.draw.line(screen, (0,0,0), (20, 2*500/3), (500-20, 2*500/3))
 
 
-def drawstatus(board):
+def drawstatus():
     for reihe in range(len(spielbrett)):
         for spalte in range(len(spielbrett[reihe])):
             if spielbrett[reihe][spalte] == 1:
@@ -88,7 +91,7 @@ while not done:
             index2 = index[1]
             spielbrett[index1][index2] = 1
             drawboard()
-            drawstatus(spielbrett)
+            drawstatus()
             pygame.display.flip()
             print("Spieler 3: {}".format(checktictactoe(spielbrett.copy(), 1)))
             spielbrett_save1 = spielbrett.copy()
@@ -103,15 +106,24 @@ while not done:
                 done = True
 
             # KI
+            t = time.time()
             minimaxe = minimaxer(copy.deepcopy(spielbrett_save1), -1)
             ai_value, ai_reihe, ai_stelle = minimaxe.wert, minimaxe.zeile, minimaxe.spalte
+            print("Minimax done in "+str(time.time()-t))
+
+            t = time.time()
+            minimaxx = minmax_alpha_beta.minimaxer(copy.deepcopy(spielbrett_save1), -1)
+            ai_value1, ai_reihe1, ai_stelle1 = minimaxx.wert, minimaxx.zeile, minimaxx.spalte
+            print("Alpha-Beta done in "+str(time.time()-t))
+
+            print("COMPARISON: "+str(ai_value)+":"+str(ai_value1)+"/"+str(ai_stelle)+" "+str(ai_reihe)+":"+str(ai_stelle1)+str(ai_reihe1))
 
             print("Ai Value: {}".format(ai_value))
 
             print("Wins: {}, Losses: {}, Draws: {}".format(minimaxe.nr_win, minimaxe.nr_lose, minimaxe.nr_draw))
 
             print("AI moves to: {}/{}".format(ai_reihe, ai_stelle))
-            spielbrett[ai_reihe][ai_stelle] = -1
+            spielbrett[ai_reihe1][ai_stelle1] = -1
             print("AI done")
             print("AI 3: {}".format(checktictactoe(spielbrett.copy(), -1)))
 
@@ -119,22 +131,22 @@ while not done:
                 print("DRAW!")
                 print(spielbrett)
                 drawboard()
-                drawstatus(spielbrett)
+                drawstatus()
                 done = True
             if checktictactoe(spielbrett.copy(), 1):
                 print("Spieler gewinnt!")
                 print(spielbrett)
                 drawboard()
-                drawstatus(spielbrett)
+                drawstatus()
                 done = True
             elif checktictactoe(spielbrett.copy(), -1):
                 print("KI gewinnt!")
                 print(spielbrett)
                 drawboard()
-                drawstatus(spielbrett)
+                drawstatus()
                 done = True
             drawboard()
-            drawstatus(spielbrett)
+            drawstatus()
             pygame.display.flip()
             print(spielbrett)
             print(RenderTree(nodes[0]))
